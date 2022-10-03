@@ -1,10 +1,12 @@
+"use strict";
+
 console.log("==== APP is running ====");
 
-let template = React.createElement(
-  "p",
+var template = React.createElement(
+  "h1",
   null,
-  "This is JSX from the app.js file"
+  "Task Randomizer"
 );
-let root = document.getElementById("app");
+var root = document.getElementById("app");
 
 ReactDOM.render(template, root);
