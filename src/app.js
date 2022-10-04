@@ -7,11 +7,25 @@ class TaskRandomizerApp extends React.Component {
     };
 
     this.handleDeleteOptions = this.handleDeleteOptions.bind(this);
+    this.handlePick = this.handlePick.bind(this);
+    this.handleAddOption = this.handleAddOption.bind(this);
   }
 
   handleDeleteOptions() {
     this.setState(() => {
       return { options: [] };
+    });
+  }
+
+  handlePick() {
+    const { options } = this.state;
+
+    alert(options[Math.floor(Math.random() * options.length)]);
+  }
+
+  handleAddOption(option) {
+    this.setState((prevState) => {
+      return { options: [...prevState.options, option] };
     });
   }
 
@@ -22,12 +36,15 @@ class TaskRandomizerApp extends React.Component {
           title="Task Randomizer"
           subtitle="Put your life in the hands of chance"
         />
-        <Action hasOptions={!!this.state.options.length} />
+        <Action
+          hasOptions={!!this.state.options.length}
+          handlePick={this.handlePick}
+        />
         <Options
           options={this.state.options}
           handleDeleteOptions={this.handleDeleteOptions}
         />
-        <AddOption />
+        <AddOption handleAddOption={this.handleAddOption} />
       </div>
     );
   }
@@ -47,14 +64,13 @@ class Header extends React.Component {
 }
 
 class Action extends React.Component {
-  handlePick() {
-    alert("handlePick");
-  }
-
   render() {
     return (
       <div>
-        <button disabled={!this.props.hasOptions} onClick={this.handlePick}>
+        <button
+          disabled={!this.props.hasOptions}
+          onClick={this.props.handlePick}
+        >
           What should I do?
         </button>
       </div>
@@ -86,11 +102,17 @@ class Option extends React.Component {
 }
 
 class AddOption extends React.Component {
+  constructor(props) {
+    super(props);
+    this.onFormSubmit = this.onFormSubmit.bind(this);
+  }
+
   onFormSubmit(e) {
     const text = e.target.elements.option.value.trim();
 
     e.preventDefault();
-    if (text) alert(text);
+    if (text) this.props.handleAddOption(text);
+    e.target.elements.option.value = "";
   }
 
   render() {

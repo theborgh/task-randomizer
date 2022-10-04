@@ -2,6 +2,8 @@
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -21,6 +23,8 @@ var TaskRandomizerApp = function (_React$Component) {
     };
 
     _this.handleDeleteOptions = _this.handleDeleteOptions.bind(_this);
+    _this.handlePick = _this.handlePick.bind(_this);
+    _this.handleAddOption = _this.handleAddOption.bind(_this);
     return _this;
   }
 
@@ -29,6 +33,21 @@ var TaskRandomizerApp = function (_React$Component) {
     value: function handleDeleteOptions() {
       this.setState(function () {
         return { options: [] };
+      });
+    }
+  }, {
+    key: "handlePick",
+    value: function handlePick() {
+      var options = this.state.options;
+
+
+      alert(options[Math.floor(Math.random() * options.length)]);
+    }
+  }, {
+    key: "handleAddOption",
+    value: function handleAddOption(option) {
+      this.setState(function (prevState) {
+        return { options: [].concat(_toConsumableArray(prevState.options), [option]) };
       });
     }
   }, {
@@ -41,12 +60,15 @@ var TaskRandomizerApp = function (_React$Component) {
           title: "Task Randomizer",
           subtitle: "Put your life in the hands of chance"
         }),
-        React.createElement(Action, { hasOptions: !!this.state.options.length }),
+        React.createElement(Action, {
+          hasOptions: !!this.state.options.length,
+          handlePick: this.handlePick
+        }),
         React.createElement(Options, {
           options: this.state.options,
           handleDeleteOptions: this.handleDeleteOptions
         }),
-        React.createElement(AddOption, null)
+        React.createElement(AddOption, { handleAddOption: this.handleAddOption })
       );
     }
   }]);
@@ -101,11 +123,6 @@ var Action = function (_React$Component3) {
   }
 
   _createClass(Action, [{
-    key: "handlePick",
-    value: function handlePick() {
-      alert("handlePick");
-    }
-  }, {
     key: "render",
     value: function render() {
       return React.createElement(
@@ -113,7 +130,10 @@ var Action = function (_React$Component3) {
         null,
         React.createElement(
           "button",
-          { disabled: !this.props.hasOptions, onClick: this.handlePick },
+          {
+            disabled: !this.props.hasOptions,
+            onClick: this.props.handlePick
+          },
           "What should I do?"
         )
       );
@@ -189,10 +209,13 @@ var Option = function (_React$Component5) {
 var AddOption = function (_React$Component6) {
   _inherits(AddOption, _React$Component6);
 
-  function AddOption() {
+  function AddOption(props) {
     _classCallCheck(this, AddOption);
 
-    return _possibleConstructorReturn(this, (AddOption.__proto__ || Object.getPrototypeOf(AddOption)).apply(this, arguments));
+    var _this6 = _possibleConstructorReturn(this, (AddOption.__proto__ || Object.getPrototypeOf(AddOption)).call(this, props));
+
+    _this6.onFormSubmit = _this6.onFormSubmit.bind(_this6);
+    return _this6;
   }
 
   _createClass(AddOption, [{
@@ -201,7 +224,8 @@ var AddOption = function (_React$Component6) {
       var text = e.target.elements.option.value.trim();
 
       e.preventDefault();
-      if (text) alert(text);
+      if (text) this.props.handleAddOption(text);
+      e.target.elements.option.value = "";
     }
   }, {
     key: "render",
