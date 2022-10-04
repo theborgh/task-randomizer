@@ -11,17 +11,29 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var TaskRandomizerApp = function (_React$Component) {
   _inherits(TaskRandomizerApp, _React$Component);
 
-  function TaskRandomizerApp() {
+  function TaskRandomizerApp(props) {
     _classCallCheck(this, TaskRandomizerApp);
 
-    return _possibleConstructorReturn(this, (TaskRandomizerApp.__proto__ || Object.getPrototypeOf(TaskRandomizerApp)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (TaskRandomizerApp.__proto__ || Object.getPrototypeOf(TaskRandomizerApp)).call(this, props));
+
+    _this.state = {
+      options: ["Wash car", "Clean room", "Feed hamster"]
+    };
+
+    _this.handleDeleteOptions = _this.handleDeleteOptions.bind(_this);
+    return _this;
   }
 
   _createClass(TaskRandomizerApp, [{
+    key: "handleDeleteOptions",
+    value: function handleDeleteOptions() {
+      this.setState(function () {
+        return { options: [] };
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
-      var options = ["Wash car", "Clean room", "Feed hamster"];
-
       return React.createElement(
         "div",
         null,
@@ -29,8 +41,11 @@ var TaskRandomizerApp = function (_React$Component) {
           title: "Task Randomizer",
           subtitle: "Put your life in the hands of chance"
         }),
-        React.createElement(Action, null),
-        React.createElement(Options, { options: options }),
+        React.createElement(Action, { hasOptions: !!this.state.options.length }),
+        React.createElement(Options, {
+          options: this.state.options,
+          handleDeleteOptions: this.handleDeleteOptions
+        }),
         React.createElement(AddOption, null)
       );
     }
@@ -98,7 +113,7 @@ var Action = function (_React$Component3) {
         null,
         React.createElement(
           "button",
-          { onClick: this.handlePick },
+          { disabled: !this.props.hasOptions, onClick: this.handlePick },
           "What should I do?"
         )
       );
@@ -111,21 +126,13 @@ var Action = function (_React$Component3) {
 var Options = function (_React$Component4) {
   _inherits(Options, _React$Component4);
 
-  function Options(props) {
+  function Options() {
     _classCallCheck(this, Options);
 
-    var _this4 = _possibleConstructorReturn(this, (Options.__proto__ || Object.getPrototypeOf(Options)).call(this, props));
-
-    _this4.handleRemoveAll = _this4.handleRemoveAll.bind(_this4);
-    return _this4;
+    return _possibleConstructorReturn(this, (Options.__proto__ || Object.getPrototypeOf(Options)).apply(this, arguments));
   }
 
   _createClass(Options, [{
-    key: "handleRemoveAll",
-    value: function handleRemoveAll() {
-      alert(this.props.options);
-    }
-  }, {
     key: "render",
     value: function render() {
       var options = this.props.options;
@@ -144,7 +151,7 @@ var Options = function (_React$Component4) {
         }),
         React.createElement(
           "button",
-          { onClick: this.handleRemoveAll },
+          { onClick: this.props.handleDeleteOptions },
           "Remove all"
         )
       );

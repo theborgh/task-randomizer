@@ -1,15 +1,32 @@
 class TaskRandomizerApp extends React.Component {
-  render() {
-    const options = ["Wash car", "Clean room", "Feed hamster"];
+  constructor(props) {
+    super(props);
 
+    this.state = {
+      options: ["Wash car", "Clean room", "Feed hamster"],
+    };
+
+    this.handleDeleteOptions = this.handleDeleteOptions.bind(this);
+  }
+
+  handleDeleteOptions() {
+    this.setState(() => {
+      return { options: [] };
+    });
+  }
+
+  render() {
     return (
       <div>
         <Header
           title="Task Randomizer"
           subtitle="Put your life in the hands of chance"
         />
-        <Action />
-        <Options options={options} />
+        <Action hasOptions={!!this.state.options.length} />
+        <Options
+          options={this.state.options}
+          handleDeleteOptions={this.handleDeleteOptions}
+        />
         <AddOption />
       </div>
     );
@@ -37,22 +54,15 @@ class Action extends React.Component {
   render() {
     return (
       <div>
-        <button onClick={this.handlePick}>What should I do?</button>
+        <button disabled={!this.props.hasOptions} onClick={this.handlePick}>
+          What should I do?
+        </button>
       </div>
     );
   }
 }
 
 class Options extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleRemoveAll = this.handleRemoveAll.bind(this);
-  }
-
-  handleRemoveAll() {
-    alert(this.props.options);
-  }
-
   render() {
     const { options } = this.props;
 
@@ -62,7 +72,7 @@ class Options extends React.Component {
         {options.map((option) => (
           <Option text={option} key={option} />
         ))}
-        <button onClick={this.handleRemoveAll}>Remove all</button>
+        <button onClick={this.props.handleDeleteOptions}>Remove all</button>
       </div>
     );
   }
