@@ -34,21 +34,25 @@ class Action extends React.Component {
     alert("handlePick");
   }
 
-  handleRemoveAll() {
-    alert("removeAll");
-  }
-
   render() {
     return (
       <div>
         <button onClick={this.handlePick}>What should I do?</button>
-        <button onClick={this.handleRemoveAll}>Remove all</button>
       </div>
     );
   }
 }
 
 class Options extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleRemoveAll = this.handleRemoveAll.bind(this);
+  }
+
+  handleRemoveAll() {
+    alert(this.props.options);
+  }
+
   render() {
     const { options } = this.props;
 
@@ -58,6 +62,7 @@ class Options extends React.Component {
         {options.map((option) => (
           <Option text={option} key={option} />
         ))}
+        <button onClick={this.handleRemoveAll}>Remove all</button>
       </div>
     );
   }
