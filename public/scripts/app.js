@@ -25,6 +25,7 @@ var TaskRandomizerApp = function (_React$Component) {
     _this.handleDeleteOptions = _this.handleDeleteOptions.bind(_this);
     _this.handlePick = _this.handlePick.bind(_this);
     _this.handleAddOption = _this.handleAddOption.bind(_this);
+    _this.handleDeleteOption = _this.handleDeleteOption.bind(_this);
     return _this;
   }
 
@@ -33,6 +34,18 @@ var TaskRandomizerApp = function (_React$Component) {
     value: function handleDeleteOptions() {
       this.setState(function () {
         return { options: [] };
+      });
+    }
+  }, {
+    key: "handleDeleteOption",
+    value: function handleDeleteOption(option) {
+      console.log("delete option " + option);
+      this.setState(function (prevState) {
+        return {
+          options: prevState.options.filter(function (el) {
+            return el !== option;
+          })
+        };
       });
     }
   }, {
@@ -74,7 +87,8 @@ var TaskRandomizerApp = function (_React$Component) {
         }),
         React.createElement(Options, {
           options: this.state.options,
-          handleDeleteOptions: this.handleDeleteOptions
+          handleDeleteOptions: this.handleDeleteOptions,
+          handleDeleteOption: this.handleDeleteOption
         }),
         React.createElement(AddOption, { handleAddOption: this.handleAddOption })
       );
@@ -134,7 +148,11 @@ var Options = function Options(props) {
       "Here are your options:"
     ),
     options.map(function (option) {
-      return React.createElement(Option, { text: option, key: option });
+      return React.createElement(Option, {
+        text: option,
+        key: option,
+        handleDeleteOption: props.handleDeleteOption
+      });
     }),
     React.createElement(
       "button",
@@ -145,12 +163,24 @@ var Options = function Options(props) {
 };
 
 var Option = function Option(props) {
-  var text = props.text;
+  var text = props.text,
+      handleDeleteOption = props.handleDeleteOption;
 
   return React.createElement(
-    "p",
+    "div",
     null,
-    text
+    React.createElement(
+      "p",
+      null,
+      text
+    ),
+    React.createElement(
+      "button",
+      { onClick: function onClick(e) {
+          return handleDeleteOption(text);
+        } },
+      "X"
+    )
   );
 };
 

@@ -9,12 +9,18 @@ class TaskRandomizerApp extends React.Component {
     this.handleDeleteOptions = this.handleDeleteOptions.bind(this);
     this.handlePick = this.handlePick.bind(this);
     this.handleAddOption = this.handleAddOption.bind(this);
+    this.handleDeleteOption = this.handleDeleteOption.bind(this);
   }
 
   handleDeleteOptions() {
-    this.setState(() => {
-      return { options: [] };
-    });
+    this.setState(() => ({ options: [] }));
+  }
+
+  handleDeleteOption(option) {
+    console.log(`delete option ${option}`);
+    this.setState((prevState) => ({
+      options: prevState.options.filter((el) => el !== option),
+    }));
   }
 
   handlePick() {
@@ -51,6 +57,7 @@ class TaskRandomizerApp extends React.Component {
         <Options
           options={this.state.options}
           handleDeleteOptions={this.handleDeleteOptions}
+          handleDeleteOption={this.handleDeleteOption}
         />
         <AddOption handleAddOption={this.handleAddOption} />
       </div>
@@ -90,7 +97,11 @@ const Options = (props) => {
     <div>
       <p>Here are your options:</p>
       {options.map((option) => (
-        <Option text={option} key={option} />
+        <Option
+          text={option}
+          key={option}
+          handleDeleteOption={props.handleDeleteOption}
+        />
       ))}
       <button onClick={props.handleDeleteOptions}>Remove all</button>
     </div>
@@ -98,8 +109,13 @@ const Options = (props) => {
 };
 
 const Option = (props) => {
-  const { text } = props;
-  return <p>{text}</p>;
+  const { text, handleDeleteOption } = props;
+  return (
+    <div>
+      <p>{text}</p>
+      <button onClick={(e) => handleDeleteOption(text)}>X</button>
+    </div>
+  );
 };
 
 class AddOption extends React.Component {
