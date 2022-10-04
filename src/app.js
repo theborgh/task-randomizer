@@ -23,6 +23,12 @@ const onRemoveAll = () => {
   render();
 };
 
+const onMakeDecision = () => {
+  const index = Math.floor(Math.random() * app.options.length);
+  const option = app.options[index];
+  alert(option);
+};
+
 const render = () => {
   const template = (
     <div>
@@ -31,19 +37,22 @@ const render = () => {
 
       <div>
         <p>
-          {app.options.length > 0 ? "Here are your options:" : "No options"}
+          {app.options.length > 0
+            ? `You have ${app.options.length} options:`
+            : "No options"}
         </p>
-        <p>{app.options.length}</p>
-        <button onClick={onRemoveAll}>Remove all</button>
+        <button disabled={!app.options.length} onClick={onMakeDecision}>
+          Make a decision
+        </button>
         <ol>
-          {app.options.forEach((option) => {
-            console.log(option);
-            <li>{option}</li>;
-          })}
+          {app.options.map((option, i) => (
+            <li key={i}>{option.toLowerCase()}</li>
+          ))}
         </ol>
         <form onSubmit={onFormSubmit}>
           <input type="text" name="option" />
           <button>Add option</button>
+          <button onClick={onRemoveAll}>Remove all</button>
         </form>
       </div>
     </div>
