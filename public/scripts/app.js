@@ -86,6 +86,16 @@ var Action = function (_React$Component3) {
   }
 
   _createClass(Action, [{
+    key: "handlePick",
+    value: function handlePick() {
+      alert("handlePick");
+    }
+  }, {
+    key: "handleRemoveAll",
+    value: function handleRemoveAll() {
+      alert("removeAll");
+    }
+  }, {
     key: "render",
     value: function render() {
       return React.createElement(
@@ -93,8 +103,13 @@ var Action = function (_React$Component3) {
         null,
         React.createElement(
           "button",
-          null,
+          { onClick: this.handlePick },
           "What should I do?"
+        ),
+        React.createElement(
+          "button",
+          { onClick: this.handleRemoveAll },
+          "Remove all"
         )
       );
     }
@@ -127,7 +142,7 @@ var Options = function (_React$Component4) {
           "Here are your options:"
         ),
         options.map(function (option) {
-          return React.createElement(Option, { text: option });
+          return React.createElement(Option, { text: option, key: option });
         })
       );
     }
@@ -171,12 +186,34 @@ var AddOption = function (_React$Component6) {
   }
 
   _createClass(AddOption, [{
+    key: "onFormSubmit",
+    value: function onFormSubmit(e) {
+      var text = e.target.elements.option.value.trim();
+
+      e.preventDefault();
+      if (text) alert(text);
+    }
+  }, {
     key: "render",
     value: function render() {
       return React.createElement(
-        "p",
+        "div",
         null,
-        "Add another option"
+        React.createElement(
+          "p",
+          null,
+          "Add another option"
+        ),
+        React.createElement(
+          "form",
+          { onSubmit: this.onFormSubmit },
+          React.createElement("input", { type: "text", name: "option" }),
+          React.createElement(
+            "button",
+            { type: "submit" },
+            "Add option"
+          )
+        )
       );
     }
   }]);
