@@ -1,83 +1,80 @@
-console.log("==== APP is running ====");
+class TaskRandomizerApp extends React.Component {
+  render() {
+    const options = ["Wash car", "Clean room", "Feed hamster"];
 
-const app = {
-  title: "Task Randomizer",
-  subtitle: "Put your life in the hands of chance",
-  options: ["Wash car", "clean room"],
-};
-
-const onFormSubmit = (e) => {
-  e.preventDefault();
-
-  const option = e.target.elements.option.value;
-
-  if (option) {
-    app.options.push(option);
-    e.target.elements.option.value = "";
-    render();
-  }
-};
-
-const onRemoveAll = () => {
-  app.options = [];
-  render();
-};
-
-const onMakeDecision = () => {
-  const index = Math.floor(Math.random() * app.options.length);
-  const option = app.options[index];
-  alert(option);
-};
-
-const render = () => {
-  const template = (
-    <div>
-      <h1>{app.title}</h1>
-      <p>{app.subtitle}</p>
-
+    return (
       <div>
-        <p>
-          {app.options.length > 0
-            ? `You have ${app.options.length} options:`
-            : "No options"}
-        </p>
-        <button disabled={!app.options.length} onClick={onMakeDecision}>
-          Make a decision
-        </button>
-        <ol>
-          {app.options.map((option, i) => (
-            <li key={i}>{option.toLowerCase()}</li>
-          ))}
-        </ol>
-        <form onSubmit={onFormSubmit}>
-          <input type="text" name="option" />
-          <button>Add option</button>
-          <button onClick={onRemoveAll}>Remove all</button>
-        </form>
+        <Header
+          title="Task Randomizer"
+          subtitle="Put your life in the hands of chance"
+        />
+        <Action />
+        <Options options={options} />
+        <AddOption />
       </div>
-    </div>
-  );
-  ReactDOM.render(template, root);
-};
+    );
+  }
+}
 
-let count = 0;
-const addOne = () => {
-  count++;
-  render();
-};
-const subtractOne = () => {
-  count--;
-  render();
-};
+class Header extends React.Component {
+  render() {
+    const { title, subtitle } = this.props;
 
-const template2 = (
+    return (
+      <div>
+        <h1>{title}</h1>
+        <h2>{subtitle}</h2>
+      </div>
+    );
+  }
+}
+
+class Action extends React.Component {
+  render() {
+    return (
+      <div>
+        <button>What should I do?</button>
+      </div>
+    );
+  }
+}
+
+class Options extends React.Component {
+  render() {
+    const { options } = this.props;
+
+    return (
+      <div>
+        <p>Here are your options:</p>
+        {options.map((option) => (
+          <Option text={option} />
+        ))}
+      </div>
+    );
+  }
+}
+
+class Option extends React.Component {
+  render() {
+    const { text } = this.props;
+    return <p>{text}</p>;
+  }
+}
+
+class AddOption extends React.Component {
+  render() {
+    return <p>Add another option</p>;
+  }
+}
+
+const jsx = (
   <div>
-    <h1>Count: {count}</h1>
-    <button onClick={addOne}>+1</button>
-    <button onClick={subtractOne}>-1</button>
+    <h1>Title</h1>
+    <Header />
+    <Action />
+    <Options />
+    <AddOption />
   </div>
 );
 
-const root = document.getElementById("app");
-
-render();
+ReactDOM.render(<TaskRandomizerApp />, document.getElementById("app"));
