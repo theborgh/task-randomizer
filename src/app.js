@@ -58,56 +58,49 @@ class TaskRandomizerApp extends React.Component {
   }
 }
 
-class Header extends React.Component {
-  render() {
-    const { title, subtitle } = this.props;
+const Header = (props) => {
+  const { title, subtitle } = props;
 
-    return (
-      <div>
-        <h1>{title}</h1>
-        <h2>{subtitle}</h2>
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <h1>{title}</h1>
+      {subtitle && <h2>{subtitle}</h2>}
+    </div>
+  );
+};
 
-class Action extends React.Component {
-  render() {
-    return (
-      <div>
-        <button
-          disabled={!this.props.hasOptions}
-          onClick={this.props.handlePick}
-        >
-          What should I do?
-        </button>
-      </div>
-    );
-  }
-}
+Header.defaultProps = {
+  title: "Default title",
+};
 
-class Options extends React.Component {
-  render() {
-    const { options } = this.props;
+const Action = (props) => {
+  return (
+    <div>
+      <button disabled={!props.hasOptions} onClick={props.handlePick}>
+        What should I do?
+      </button>
+    </div>
+  );
+};
 
-    return (
-      <div>
-        <p>Here are your options:</p>
-        {options.map((option) => (
-          <Option text={option} key={option} />
-        ))}
-        <button onClick={this.props.handleDeleteOptions}>Remove all</button>
-      </div>
-    );
-  }
-}
+const Options = (props) => {
+  const { options } = props;
 
-class Option extends React.Component {
-  render() {
-    const { text } = this.props;
-    return <p>{text}</p>;
-  }
-}
+  return (
+    <div>
+      <p>Here are your options:</p>
+      {options.map((option) => (
+        <Option text={option} key={option} />
+      ))}
+      <button onClick={props.handleDeleteOptions}>Remove all</button>
+    </div>
+  );
+};
+
+const Option = (props) => {
+  const { text } = props;
+  return <p>{text}</p>;
+};
 
 class AddOption extends React.Component {
   constructor(props) {
