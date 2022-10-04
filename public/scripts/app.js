@@ -46,6 +46,14 @@ var TaskRandomizerApp = function (_React$Component) {
   }, {
     key: "handleAddOption",
     value: function handleAddOption(option) {
+      if (!option) {
+        return "Enter a valid value";
+      }
+
+      if (this.state.options.indexOf(option) > -1) {
+        return "This option already exists";
+      }
+
       this.setState(function (prevState) {
         return { options: [].concat(_toConsumableArray(prevState.options), [option]) };
       });
@@ -214,6 +222,10 @@ var AddOption = function (_React$Component6) {
 
     var _this6 = _possibleConstructorReturn(this, (AddOption.__proto__ || Object.getPrototypeOf(AddOption)).call(this, props));
 
+    _this6.state = {
+      errorMessage: ""
+    };
+
     _this6.onFormSubmit = _this6.onFormSubmit.bind(_this6);
     return _this6;
   }
@@ -222,10 +234,15 @@ var AddOption = function (_React$Component6) {
     key: "onFormSubmit",
     value: function onFormSubmit(e) {
       var text = e.target.elements.option.value.trim();
+      var error = "";
 
       e.preventDefault();
-      if (text) this.props.handleAddOption(text);
+      error = this.props.handleAddOption(text);
       e.target.elements.option.value = "";
+
+      this.setState(function () {
+        return { errorMessage: error };
+      });
     }
   }, {
     key: "render",
@@ -246,6 +263,11 @@ var AddOption = function (_React$Component6) {
             "button",
             { type: "submit" },
             "Add option"
+          ),
+          this.state.errorMessage && React.createElement(
+            "p",
+            null,
+            this.state.errorMessage
           )
         )
       );

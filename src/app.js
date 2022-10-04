@@ -24,6 +24,14 @@ class TaskRandomizerApp extends React.Component {
   }
 
   handleAddOption(option) {
+    if (!option) {
+      return "Enter a valid value";
+    }
+
+    if (this.state.options.indexOf(option) > -1) {
+      return "This option already exists";
+    }
+
     this.setState((prevState) => {
       return { options: [...prevState.options, option] };
     });
@@ -104,15 +112,24 @@ class Option extends React.Component {
 class AddOption extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      errorMessage: "",
+    };
+
     this.onFormSubmit = this.onFormSubmit.bind(this);
   }
 
   onFormSubmit(e) {
     const text = e.target.elements.option.value.trim();
+    let error = "";
 
     e.preventDefault();
-    if (text) this.props.handleAddOption(text);
+    error = this.props.handleAddOption(text);
     e.target.elements.option.value = "";
+
+    this.setState(() => {
+      return { errorMessage: error };
+    });
   }
 
   render() {
@@ -122,6 +139,7 @@ class AddOption extends React.Component {
         <form onSubmit={this.onFormSubmit}>
           <input type="text" name="option" />
           <button type="submit">Add option</button>
+          {this.state.errorMessage && <p>{this.state.errorMessage}</p>}
         </form>
       </div>
     );
